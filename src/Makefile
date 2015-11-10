@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -I. `pkg-config --cflags gtk+-3.0`
 LIBS = `pkg-config --libs gtk+-3.0`
-SOURCES = ltxApp.c ltxWindow.c
-OBJECTS = ltxApp.o ltxWindow.o 
+SOURCES = ltxApp.c ltxWindow.c ltxFileCommands.c ltxStatusbar.c
+OBJECTS = ltxApp.o ltxWindow.o ltxFileCommands.o ltxStatusbar.o
 EXECUTABLE = ltxApp
 
 ltxApp: $(OBJECTS)
@@ -13,6 +13,12 @@ ltxApp.o: ltxApp.c
 
 ltxWindow.o: ltxWindow.c
 	$(CC) $(CFLAGS) $(LIBS) -c ltxWindow.c
+
+ltxFileCommands.o: ltxFileCommands.c
+	$(CC) $(CFLAGS) $(LIBS) -c ltxFileCommands.c
+
+ltxStatusbar.o: ltxStatusbar.c
+	$(CC) $(CFLAGS) $(LIBS) -c ltxStatusbar.c
 
 clean:
 	rm *.o

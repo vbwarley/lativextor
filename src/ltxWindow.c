@@ -1,43 +1,6 @@
 #include "ltxWindow.h"
-
-void open_activated(GtkWidget *f)
-{
-    g_print("File -> Open activated.\n");
-}
-
-void quit_activated(GtkWidget *f)
-{
-    g_print("File -> Quit activated... bye.\n");
-    gtk_main_quit();
-}
-
-void update_statusbar(GtkTextBuffer *buffer, GtkStatusbar *statusbar) 
-{
-    gchar *msg;
-    gint row, col;
-    GtkTextIter iter;
-
-    gtk_statusbar_pop(statusbar, 0);
-
-    gtk_text_buffer_get_iter_at_mark(buffer,
-            &iter, gtk_text_buffer_get_insert(buffer));
-
-    row = gtk_text_iter_get_line(&iter);
-    col = gtk_text_iter_get_line_offset(&iter);
-
-    msg = g_strdup_printf("Col: %d Ln: %d", col+1, row+1);
-
-    gtk_statusbar_push(statusbar, 0, msg);
-
-    g_free(msg);
-
-}
-
-void mark_set_callback(GtkTextBuffer *buffer,
-        const GtkTextIter *new_location, GtkTextMark *mark, gpointer data)
-{
-    update_statusbar(buffer, GTK_STATUSBAR(data));
-}
+#include "ltxFileCommands.h"
+#include "ltxStatusbar.h"
 
 void ltx_window_init(LTXWindow *ltx_window)
 {
@@ -61,9 +24,9 @@ void ltx_window_init(LTXWindow *ltx_window)
     gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->filemenu), ltx_window->quit);
     gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->menubar), ltx_window->file); 
     //Connects GCallback function open_activated to "activate" signal for "open" menu item
-    g_signal_connect(G_OBJECT(ltx_window->open), "activate", G_CALLBACK(open_activated), NULL);
+    g_signal_connect(G_OBJECT(ltx_window->open), "activate", G_CALLBACK(open_file), NULL);
     //Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-    g_signal_connect(G_OBJECT(ltx_window->quit), "activate", G_CALLBACK(quit_activated), NULL);
+    g_signal_connect(G_OBJECT(ltx_window->quit), "activate", G_CALLBACK(quit), NULL);
 
     ltx_window->editmenu = gtk_menu_new();
     ltx_window->edit = gtk_menu_item_new_with_label("Edit");
