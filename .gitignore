@@ -1,0 +1,5 @@
+*.py
+*.pyc
+*.out
+*.o
+ltxApp
