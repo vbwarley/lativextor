@@ -1,5 +1,6 @@
 #include "ltxMenubar.h"
 #include "ltxFileCommands.h"
+#include "ltxHelpCommands.h"
 
 #include <stdlib.h>
 
@@ -112,6 +113,7 @@ void ltx_create_menubar_help()
     gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar->menubar), menu_bar->help);
 
     /* signals */
+    g_signal_connect(G_OBJECT(menu_bar->about), "activate", G_CALLBACK(ltx_help_about), NULL);
 }
 
 LTXMenubar * ltx_create_menubar() 
