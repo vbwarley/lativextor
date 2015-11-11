@@ -1,6 +1,7 @@
 #include "ltxWindow.h"
 #include "ltxFileCommands.h"
 #include "ltxStatusbar.h"
+#include "ltxMenubar.h"
 
 void ltx_window_init(LTXWindow *ltx_window)
 {
@@ -10,47 +11,13 @@ void ltx_window_init(LTXWindow *ltx_window)
     gtk_window_set_title(GTK_WINDOW(ltx_window->window), "LTXApp - Lativextor");
     gtk_window_set_resizable(GTK_WINDOW(ltx_window->window), FALSE);
     /* creates a menu bar, obviously */
-    ltx_window->menubar = gtk_menu_bar_new(); 
-
-    ltx_window->filemenu = gtk_menu_new(); /* creates a drop down menu */
-
-    /* create a children for filemenu */
-    ltx_window->file = gtk_menu_item_new_with_label("File");
-    ltx_window->open = gtk_menu_item_new_with_label("Open"); 
-    ltx_window->quit = gtk_menu_item_new_with_label("Quit");
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(ltx_window->file), ltx_window->filemenu); /* adds 'file' as the submenu of 'filemenu' */
-    /* adds a new GtkMenuItem to the end of the menu shell's item list */
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->filemenu), ltx_window->open); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->filemenu), ltx_window->quit);
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->menubar), ltx_window->file); 
-    //Connects GCallback function open_activated to "activate" signal for "open" menu item
-    g_signal_connect(G_OBJECT(ltx_window->open), "activate", G_CALLBACK(open_file), NULL);
-    //Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-    g_signal_connect(G_OBJECT(ltx_window->quit), "activate", G_CALLBACK(quit), NULL);
-
-    ltx_window->editmenu = gtk_menu_new();
-    ltx_window->edit = gtk_menu_item_new_with_label("Edit");
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(ltx_window->edit), ltx_window->editmenu); /* adds 'edit' as the submenu of 'filemenu' */
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->menubar), ltx_window->edit);
-
-    ltx_window->formatmenu = gtk_menu_new();
-    ltx_window->format = gtk_menu_item_new_with_label("Format");
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(ltx_window->format), ltx_window->formatmenu);
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->menubar), ltx_window->format);
-
-    ltx_window->viewmenu = gtk_menu_new();
-    ltx_window->view = gtk_menu_item_new_with_label("View");
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(ltx_window->view), ltx_window->viewmenu);
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->menubar), ltx_window-> view);
+    // ltx_window->menubar = gtk_menu_bar_new(); 
+    ltx_window->menu_bar = ltx_create_menubar();
     
-    ltx_window->helpmenu = gtk_menu_new();
-    ltx_window->help = gtk_menu_item_new_with_label("Help");
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(ltx_window->help), ltx_window->helpmenu);
-    gtk_menu_shell_append(GTK_MENU_SHELL(ltx_window->menubar), ltx_window->help);
     ltx_window->grid = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); 
-  
-    gtk_box_pack_start(GTK_BOX(ltx_window->grid), ltx_window->menubar, FALSE, FALSE, 0); 
+    gtk_box_pack_start(GTK_BOX(ltx_window->grid), ltx_window->menu_bar->menubar, FALSE, FALSE, 0); 
 
+    /* need to model this */
     ltx_window->textview = gtk_text_view_new();
     // gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
     ltx_window->buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ltx_window->textview));
